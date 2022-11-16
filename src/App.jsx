@@ -1,34 +1,65 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import './App.css'
+import "typeface-roboto";
+import React, { useState } from "react";
+import Drawer from "@mui/material/Drawer";
+import Button from "@mui/material/Button";
+import List from "@mui/material/List";
+import ListItem from "@mui/material/ListItem";
+import ListItemText from "@mui/material/ListItemText";
+import { BrowserRouter as Router, Route, Switch, Link } from "react-router-dom";
+import First from "./First";
+import Second from "./Second";
+import Third from "./Third";
 
-function App() {
-  const [count, setCount] = useState(0)
+export default function App({ links }) {
+	const [open, setOpen] = useState(false);
 
-  return (
-    <div className="App">
-      <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src="/vite.svg" className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://reactjs.org" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </div>
-  )
+	function toggleDrawer({ type, key }) {
+		if (type === "keydown" && (key === "Tab" || key === "Shift")) {
+			return;
+		}
+		setOpen(!open);
+	}
+
+	return (
+		<Router>
+			<Button onClick={toggleDrawer}>Open Nav</Button>
+			<section>
+				<Route path="/first" component={First} />
+				<Route path="/second" component={Second} />
+				<Route path="/third" component={Third} />
+			</section>
+			<Drawer open={open} onClose={toggleDrawer}>
+				<div style={{ width: 250 }} role="presentation" onClick={toggleDrawer} onKeyDown={toggleDrawer}>
+					<List>
+						{links.map((link) => (
+							<ListItem button key={link.url} component={Link} to={link.url}>
+								<Switch>
+									<Route
+										exact
+										path={link.url}
+										render={() => <ListItemText primary={link.name} primaryTypographyProps={{ color: "primary" }} />}
+									/>
+									<Route path="/" render={() => <ListItemText primary={link.name} />} />
+								</Switch>
+							</ListItem>
+						))}
+					</List>
+				</div>
+			</Drawer>
+		</Router>
+	);
 }
 
-export default App
+App.defaultProps = {
+	links: [
+		{ url: "/first", name: "First Page" },
+		{
+			url: "/second",
+			name: "Second Page",
+		},
+		{
+			url: "/third",
+			name: "Third Page",
+		},
+	],
+};
