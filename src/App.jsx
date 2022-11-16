@@ -1,34 +1,51 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import './App.css'
+import React, { useState } from "react";
+import "./App.css";
+import FormExample0 from "./FormExample0";
+import FormExample1 from "./FormExample1";
+import ShowData from "./ShowData";
 
-function App() {
-  const [count, setCount] = useState(0)
+const onSubmit = (v) => alert("Submit value: " + JSON.stringify(v, null, 2));
 
-  return (
-    <div className="App">
-      <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src="/vite.svg" className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://reactjs.org" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </div>
-  )
-}
+const App = () => {
+	const [formFields, setFormFields] = useState({});
+	const [errors, setErrors] = useState({});
+	const [valid, setValid] = useState();
+	const [firstForm, setFirstForm] = useState(true);
 
-export default App
+	return (
+		<div className="App">
+			<nav>
+				<select onChange={(evt) => setFirstForm(evt.target.value === "first")}>
+					<option value="first">Single field</option>
+					<option value="second">Multiple fields</option>
+				</select>
+			</nav>
+			<main>
+				{firstForm ? (
+					<FormExample0
+						onChange={(ff, v, e) => {
+							setFormFields(ff);
+							setValid(v);
+							setErrors(e);
+						}}
+						onSubmit={onSubmit}
+						initialValue={{ field1: "Some stuff" }}
+					/>
+				) : (
+					<FormExample1
+						onChange={(ff, v, e) => {
+							setFormFields(ff);
+							setValid(v);
+							setErrors(e);
+						}}
+						onSubmit={onSubmit}
+						initialValue={{ address1: "1 Main Street" }}
+					/>
+				)}
+				<ShowData formFields={formFields} errors={errors} valid={valid} />
+			</main>
+		</div>
+	);
+};
+
+export default App;
