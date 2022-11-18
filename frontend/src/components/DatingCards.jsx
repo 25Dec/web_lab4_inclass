@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import DatingCard from "react-tinder-card";
 import "./DatingCards.css";
-import axios from "axios";
+import axios from "./axios";
 
 const DatingCards = () => {
 	const [people, setPeople] = useState([]);

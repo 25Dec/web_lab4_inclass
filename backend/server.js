@@ -1,21 +1,20 @@
-const express = require("express");
-const mongoose = require("mongoose");
-const Cors = require("cors");
-//import Cards from "./model/card";
-require("./model/card");
+import express from "express";
+import mongoose from "mongoose";
+import Cors from "cors";
+import Cards from "./dbCards.js";
 
 const app = express();
 const port = process.env.PORT || 8001;
 const connection_url =
-	"mongodb+srv://thien2002nhan:<password>@mernapp.zoqqyub.mongodb.net/?retryWrites=true&w=majority";
+	"mongodb+srv://thien2002nhan:th13n2002nh4n@mernapp.zoqqyub.mongodb.net/?retryWrites=true&w=majority";
 
 app.use(express.json());
 app.use(Cors());
 
 mongoose.connect(connection_url, {
 	useNewUrlParser: true,
-	useCreateIndex: true,
-	useUnifiedTopology: true,
+	// useCreateIndex: true,
+	// useUnifiedTopology: true,
 });
 
 app.get("/", (req, res) => res.status(200).send("Hello TheWebDev"));
@@ -35,4 +34,4 @@ app.get("/dating/cards", (req, res) => {
 	});
 });
 
-app.listen(port, () => console.log(`Listening on localhost: ${port})`));
+app.listen(port, () => console.log(`Listening on localhost: ${port}`));
